@@ -74,7 +74,8 @@ auto findPid(std::string_view name) -> std::optional<DWORD> {
   std::vector<char> nameBuf;
   nameBuf.resize(name.length() + 2);
 
-  for (auto pid : buffer | views::take(needed / sizeof(DWORD))) {
+  std::span<DWORD> processes(buffer.data(), needed / sizeof(DWORD));
+  for (auto pid : processes) {
     ManagedHandle handle =
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
     if (handle() == nullptr) {
