@@ -31,6 +31,7 @@ jobs:
       - name: Upload bundle
         uses: actions/upload-artifact@v3
         with:
+          name: crashy.zip
           path: build/crashy.zip
 
   check-release:
