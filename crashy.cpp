@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <array>
 #include <charconv>
 #include <cstdlib>
 #include <filesystem>
@@ -74,9 +75,7 @@ auto findPid(std::string_view name) -> std::optional<DWORD> {
   std::vector<char> nameBuf;
   nameBuf.resize(name.length() + 2);
 
-  std::span<DWORD> processes(buffer.data(),
-                             static_cast<size_t>(needed) / sizeof(DWORD));
-  for (auto pid : processes) {
+  for (auto pid : buffer | views::take(needed / sizeof(DWORD))) {
     ManagedHandle handle =
         OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, pid);
     if (handle() == nullptr) {
