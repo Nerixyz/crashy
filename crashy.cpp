@@ -30,6 +30,7 @@ template <class... Ts> struct overloaded : Ts... {
 
 constexpr const size_t N_PROCESSES = 1024;
 
+// TODO: wait for GitHub CI to have MSVC 14.37 or later (14.35 currently)
 void println(const auto &data) { std::cout << data << std::endl; }
 
 [[noreturn]] void fail() { std::exit(1); }
