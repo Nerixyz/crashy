@@ -1,0 +1,7 @@
+.vscode
+.code
+.idea
+.vs
+.cache
+build
+*.o
