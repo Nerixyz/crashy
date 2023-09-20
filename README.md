@@ -7,7 +7,7 @@ Download the app and its payload from the [releases tab](https://github.com/Neri
 
 ## Usage
 
-```ps
+```text
 crashy.exe <target (PID or executable)> [-p <payload-path>]
 ```
 
@@ -17,7 +17,7 @@ crashy.exe <target (PID or executable)> [-p <payload-path>]
 
 A recent C++ compiler and CMake are required. This example uses `ninja` as the generator.
 
-```ps
+```text
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
 cd build
 ninja all
