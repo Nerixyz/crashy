@@ -18,7 +18,7 @@
 #include <Psapi.h>
 // clang-format on
 
-using namespace std::string_view_literals;
+using namespace std::literals;
 namespace views = std::views;
 namespace ranges = std::ranges;
 namespace fs = std::filesystem;
@@ -45,7 +45,7 @@ auto isNumeric(std::string_view string) -> bool {
 }
 
 struct Args {
-  std::string_view payloadPath;
+  std::string payloadPath;
   std::variant<DWORD, std::string_view> executable;
 
   static auto parse(std::span<const char *> args) -> Args;
@@ -166,7 +166,7 @@ auto main(int argc, const char *argv[]) -> int {
 }
 
 auto Args::parse(std::span<const char *> args) -> Args {
-  std::optional<std::string_view> payloadPath;
+  std::optional<std::string> payloadPath;
   std::optional<std::variant<DWORD, std::string_view>> executable;
 
   bool seenFlag = false;
@@ -214,7 +214,19 @@ auto Args::parse(std::span<const char *> args) -> Args {
   }
 
   return Args{
-      .payloadPath = payloadPath.value_or("crashy-payload.dll"sv),
+      .payloadPath =
+          payloadPath
+              .or_else([]() -> std::optional<std::string> {
+                // Use the path relative from the current executable
+                std::array<char, MAX_PATH> buffer;
+                auto length =
+                    GetModuleFileNameA(nullptr, buffer.data(), buffer.size());
+                fs::path currentExe = std::string_view{
+                    buffer.data(), static_cast<size_t>(length)};
+                return (currentExe.parent_path() / "crashy-payload.dll"sv)
+                    .string();
+              })
+              .value(),
       .executable = *executable,
   };
 }

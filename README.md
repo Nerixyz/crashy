@@ -11,7 +11,7 @@ Download the app and its payload from the [releases tab](https://github.com/Neri
 crashy.exe <target (PID or executable)> [-p <payload-path>]
 ```
 
-`<payload-path>` will default to `crashy-payload.dll`.
+`<payload-path>` will default to `crashy-payload.dll` - the path is relative to the location of the executable.
 
 ## Building
 
