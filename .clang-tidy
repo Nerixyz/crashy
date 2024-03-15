@@ -8,5 +8,9 @@ Checks: "
   misc-*,
   bugprone-*,
   cert-*,
-  -llvm-include-order
+  -llvm-include-order,
+  -readability-implicit-bool-conversion,
+  -readability-identifier-length,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
   "
