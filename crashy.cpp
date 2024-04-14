@@ -3,9 +3,8 @@
 #include <charconv>
 #include <cstdlib>
 #include <filesystem>
-#include <format>
-#include <iostream>
 #include <optional>
+#include <print>
 #include <ranges>
 #include <span>
 #include <string_view>
@@ -30,12 +29,9 @@ template <class... Ts> struct overloaded : Ts... {
 
 constexpr const size_t N_PROCESSES = 1024;
 
-// TODO: wait for GitHub CI to have MSVC 14.37 or later (14.35 currently)
-void println(const auto &data) { std::cout << data << std::endl; }
-
 [[noreturn]] void fail() { std::exit(1); }
 [[noreturn]] void fail(const auto &msg) {
-  println(std::format("Unable to continue: {}", msg));
+  std::println("Unable to continue: {}", msg);
   std::exit(1);
 }
 
@@ -111,9 +107,9 @@ void inject(std::string_view path, DWORD pid) {
   try {
     canonical = fs::canonical(path).string();
   } catch (const fs::filesystem_error &ex) {
-    println(std::format("Failed to canonicalize payload path (does the payload "
-                        "exist?): {} (code: {})",
-                        ex.what(), ex.code().value()));
+    std::println("Failed to canonicalize payload path (does the payload "
+                 "exist?): {} (code: {})",
+                 ex.what(), ex.code().value());
     fail();
   }
 
@@ -188,7 +184,8 @@ auto Args::parse(std::span<const char *> args) -> Args {
     }
 
     if (arg == "-h"sv) {
-      println("crashy.exe <target (PID or executable)> [-p <payload-path>]");
+      std::println(
+          "crashy.exe <target (PID or executable)> [-p <payload-path>]");
       std::exit(0);
     }
 
